@@ -1,25 +1,25 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
-import { setupListeners } from '@reduxjs/toolkit/query';
-import { api } from '@state/api';
+import { CssBaseline } from "@mui/material"
+import React from "react"
+import ReactDOM from "react-dom/client"
+import { Provider } from "react-redux"
+import App from "./App"
+import { store } from "./redux/store"
+import { PersistGate } from "redux-persist/integration/react";
+import {
+  persistStore,
+} from "redux-persist";
 
 
-export const store = configureStore({
-  reducer : {[api.reducerPath]:api.reducer},
-  middleware: (getDefault)=> getDefault().concat(api.middleware),
-})
 
-setupListeners(store.dispatch);
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"))
 root.render(
-  <Provider store = {store}>
-    <App />
-  </Provider >
-);
+  <React.StrictMode>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistStore(store)}>
+        <App />
+      </PersistGate>
+    </Provider>
+  </React.StrictMode>
+)
 
 
