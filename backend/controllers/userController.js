@@ -1,8 +1,6 @@
 import bcrypt from "bcryptjs";
 import { v2 as cloudinary } from "cloudinary";
 import User from "../models/user.js";
-import UserOtpVerification from "../models/userOtpVerification.js";
-import { sendOtpVerificationEmail } from "../lib/utils/sendOtpVerificationEmail.js";
 import nodemailer from "nodemailer";
 
 //nodemailer stuff
@@ -95,71 +93,39 @@ export const updateUser = async (req, res) => {
   }
 };
 
-export const verifyOtp = async (req, res) => {
-  try {
-    const { otp } = req.body;
-    const userId = req.user._id;
+// export const verifyEmailLink = async (req, res) => {
+//   try {
+//     let user = await User.findOne({ _id: req.params.id });
 
-    if (!userId || !otp) {
-      return res
-        .status(400)
-        .json({ error: "Empty otp details are not allowed" });
-    } else {
-      const userOtpVerificationRecords = await UserOtpVerification.find({
-        userId,
-      });
+//     if (!user) {
+//       return res.status(404).json({ error: "Invalid Link!" });
+//     }
 
-      if (userOtpVerificationRecords.length <= 0) {
-        return res.status(404).json({
-          error:
-            "Account record doesn't exist or has been verified already. Please signup or login",
-        });
-      } else {
-        const { expiresAt } = userOtpVerificationRecords[0];
-        const hashedOtp = userOtpVerificationRecords[0].otp;
+//     const token = await EmailToken.findOne({
+//       userId: user._id,
+//       token: req.params.token,
+//     });
 
-        if (expiresAt < Date.now()) {
-          await UserOtpVerification.deleteMany({ userId });
-          return res.status(400).json({ error: "Otp has expired" });
-        } else {
-          const validOtp = await bcrypt.compare(otp, hashedOtp);
+//     if (!token) {
+//       return res
+//         .status(404)
+//         .json({ error: "Invalid Link or user already verified!" });
+//     }
 
-          if (!validOtp) {
-            return res
-              .status(400)
-              .json({ error: "Invalid Otp. Check your email inbox." });
-          } else {
-            //success
-            await User.updateOne({ _id: userId }, { verified: true });
-            await UserOtpVerification.deleteMany({ userId });
+//     await User.updateOne({ _id: user._id }, { $set: { verified: true } });
+//     await EmailToken.deleteMany({ userId: user._id });
 
-            res.json({
-              status: "VERIFIED",
-              message: "Email verified successfully",
-            });
-          }
-        }
-      }
-    }
-  } catch (error) {
-    console.log("Error in verifyOtp", error.message);
-    res.status(500).json({ error: "Internal server error" });
-  }
-};
-
-export const resendOtp = async (req, res) => {
-  try {
-    const userId = req.user._id;
-
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    await UserOtpVerification.deleteMany({ userId });
-    sendOtpVerificationEmail(user, res);
-  } catch (error) {
-    console.log("Error in resendOtp", error.message);
-    res.status(500).json({ error: "Internal server error" });
-  }
-};
+//     res.status(200).json({
+//       message: "Email verified Succeffully",
+//       data: {
+//         _id: user._id,
+//         fullName: user.fullName,
+//         role: user.role,
+//         verified: true,
+//       },
+//     });
+//   } catch (error) {
+//     console.log("Error in verifyEmail:", error.message);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// };
