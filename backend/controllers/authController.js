@@ -282,3 +282,30 @@ export const resendOtp = async (req, res) => {
     res.status(500).json({ error: "Internal server error!" });
   }
 };
+
+export const cancellVerification = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    const user = await User.findById(userId);
+    const emailRecord = await UserOtpVerification.find({ userId });
+
+    if (user) {
+      if (emailRecord) {
+        await UserOtpVerification.deleteMany({ userId });
+        await User.findByIdAndDelete(userId);
+        res.cookie("jwt", "", { maxAge: 0 });
+        res.status(200).json({ message: "Verification Cancelled!" });
+      } else {
+        await User.findByIdAndDelete(userId);
+        res.cookie("jwt", "", { maxAge: 0 });
+        res.status(200).json({ message: "Verification Cancelled!" });
+      }
+    } else {
+      return res.status(404).json({ error: "user is not in our record!" });
+    }
+  } catch (error) {
+    console.log("Error in cancellVerification:", error.message);
+    res.status(500).json({ error: "Internal server error!" });
+  }
+};
