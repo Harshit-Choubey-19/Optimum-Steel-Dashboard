@@ -1,265 +1,144 @@
-import {
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-  Transition,
-} from "@headlessui/react";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import toast from "react-hot-toast";
+import { useState } from "react";
+import NavBar from "../../components/NavBar";
+import SideBar from "../../components/SideBar";
+import Product from "../../components/Product";
+import img from "../../images/steel.jpg";
+import MobileProduct from "../../components/MobileProduct";
 
-const user = {
-  name: "Tom Cook",
-  email: "tom@example.com",
-  imageUrl:
-    "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-};
-const navigation = [
-  { name: "Dashboard", href: "#", current: true },
-  { name: "Team", href: "#", current: false },
-  { name: "Projects", href: "#", current: false },
-  { name: "Calendar", href: "#", current: false },
-  { name: "Reports", href: "#", current: false },
-];
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
-
-function DashboardPage() {
-  const queryClient = useQueryClient();
-
-  const { mutate: logoutMutation } = useMutation({
-    mutationFn: async () => {
-      try {
-        const res = await fetch("/api/auth/logout", {
-          method: "POST",
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          throw new Error(data.error || "Something went wrong!");
-        }
-      } catch (error) {
-        console.log(error);
-        throw new Error(error.message);
-      }
-    },
-    onSuccess: () => {
-      // Redirect to login page
-      toast.success("Loged out successfully!");
-      queryClient.invalidateQueries({ queryKey: ["authUser"] });
-    },
-    onError: () => {
-      toast.error("Failed to log out!");
-    },
-  });
-
-  const userNavigation = [
-    { name: "Your Profile", href: "#" },
-    { name: "Settings", href: "#" },
+const DashboardPage = () => {
+  const [products, setProducts] = useState([
     {
-      name: "Sign out",
-      onClick: () => {
-        logoutMutation();
-      },
+      id: 1,
+      itemName: "CRC IS513",
+      grade: "Primary",
+      itemImg: img,
+      dimension: "Primary 0.90mm",
+      location: "Delhi",
+      price: "₹62,000",
+      createdAt: "1 day ago",
     },
-  ];
+    {
+      id: 2,
+      itemName: "CRC IS514",
+      grade: "-",
+      itemImg: img,
+      dimension: "Primary 0.90mm",
+      location: "Delhi",
+      price: "₹65,000",
+      createdAt: "21 hours ago",
+    },
+    {
+      id: 3,
+      itemName: "CRC IS515",
+      grade: "-",
+      itemImg: img,
+      dimension: "Primary 0.80mm",
+      location: "Faridabad",
+      price: "₹75,000",
+      createdAt: null,
+    },
+    {
+      id: 4,
+      itemName: "CRC IS516",
+      grade: "-",
+      itemImg: img,
+      dimension: "Primary 0.60mm",
+      location: "Ludhiana",
+      price: "₹25,000",
+      createdAt: null,
+    },
+    {
+      id: 5,
+      itemName: "CRC IS517",
+      grade: "-",
+      itemImg: img,
+      dimension: "Primary 0.70mm",
+      location: "Ahmedabad",
+      price: "₹15,000",
+      createdAt: null,
+    },
+  ]);
 
   return (
     <>
-      <div className="min-h-full">
-        <Disclosure as="nav" className="bg-gray-800">
-          {({ open }) => (
-            <>
-              <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div className="flex h-16 items-center justify-between">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0">
-                      <img
-                        className="h-8 w-8"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                        alt="Your Company"
-                      />
-                    </div>
-                    <div className="hidden md:block">
-                      <div className="ml-10 flex items-baseline space-x-4">
-                        {navigation.map((item) => (
-                          <a
-                            key={item.name}
-                            href={item.href}
-                            className={classNames(
-                              item.current
-                                ? "bg-gray-900 text-white"
-                                : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                              "rounded-md px-3 py-2 text-sm font-medium"
-                            )}
-                            aria-current={item.current ? "page" : undefined}
-                          >
-                            {item.name}
-                          </a>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="hidden md:block">
-                    <div className="ml-4 flex items-center md:ml-6">
-                      <button
-                        type="button"
-                        className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                      >
-                        <span className="absolute -inset-1.5" />
-                        <span className="sr-only">View notifications</span>
-                        <BellIcon className="h-6 w-6" aria-hidden="true" />
-                      </button>
+      <NavBar />
 
-                      {/* Profile dropdown */}
-                      <Menu as="div" className="relative ml-3">
-                        <div>
-                          <MenuButton className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                            <span className="absolute -inset-1.5" />
-                            <span className="sr-only">Open user menu</span>
-                            <img
-                              className="h-8 w-8 rounded-full"
-                              src={user.imageUrl}
-                              alt=""
-                            />
-                          </MenuButton>
-                        </div>
-                        <Transition
-                          enter="transition ease-out duration-100"
-                          enterFrom="transform opacity-0 scale-95"
-                          enterTo="transform opacity-100 scale-100"
-                          leave="transition ease-in duration-75"
-                          leaveFrom="transform opacity-100 scale-100"
-                          leaveTo="transform opacity-0 scale-95"
-                        >
-                          <MenuItems className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            {userNavigation.map((item) => (
-                              <MenuItem key={item.name}>
-                                {({ focus }) => (
-                                  <a
-                                    href={item.href}
-                                    className={classNames(
-                                      focus ? "bg-gray-100 cursor-pointer" : "",
-                                      "block px-4 py-2 text-sm text-gray-700"
-                                    )}
-                                    onClick={item?.onClick}
-                                  >
-                                    {item.name}
-                                  </a>
-                                )}
-                              </MenuItem>
-                            ))}
-                          </MenuItems>
-                        </Transition>
-                      </Menu>
-                    </div>
-                  </div>
-                  <div className="-mr-2 flex md:hidden">
-                    {/* Mobile menu button */}
-                    <DisclosureButton className="relative inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                      <span className="absolute -inset-0.5" />
-                      <span className="sr-only">Open main menu</span>
-                      {open ? (
-                        <XMarkIcon
-                          className="block h-6 w-6"
-                          aria-hidden="true"
-                        />
-                      ) : (
-                        <Bars3Icon
-                          className="block h-6 w-6"
-                          aria-hidden="true"
-                        />
-                      )}
-                    </DisclosureButton>
-                  </div>
-                </div>
-              </div>
-
-              <DisclosurePanel className="md:hidden">
-                <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
-                  {navigation.map((item) => (
-                    <DisclosureButton
-                      key={item.name}
-                      as="a"
-                      href={item.href}
-                      className={classNames(
-                        item.current
-                          ? "bg-gray-900 text-white"
-                          : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                        "block rounded-md px-3 py-2 text-base font-medium"
-                      )}
-                      aria-current={item.current ? "page" : undefined}
-                    >
-                      {item.name}
-                    </DisclosureButton>
+      <div className="flex">
+        <SideBar />
+        <div className="w-full p-3">
+          <div className="bg-white rounded-md p-4 shadow-md mb-4">
+            <h2 className="text-2xl font-bold mb-2 text-black">
+              CRC Prices Today
+            </h2>
+            <div className="flex gap-4 mb-4 max-[630px]:w-2/3 w-2/12">
+              <select className="bg-blue-400 rounded-md px-3 py-2 text-white">
+                <option
+                  disabled
+                  selected
+                  value=""
+                  className="bg-white text-black"
+                >
+                  Locations
+                </option>
+                <option value="" className="bg-white text-black">
+                  New Delhi
+                </option>
+                <option value="" className="bg-white text-black">
+                  Hyderabad
+                </option>
+                {/* Add more options for locations */}
+              </select>
+              <select className=" bg-blue-400 rounded-md px-3 py-2 text-white">
+                <option value="" disabled selected>
+                  Brands
+                </option>
+                {/* Add more options for brands */}
+              </select>
+              <select className="bg-blue-400 rounded-md px-3 py-2 text-white">
+                <option value="" disabled selected>
+                  Grade
+                </option>
+                {/* Add more options for grades */}
+              </select>
+              <select className="bg-blue-400 rounded-md px-3 py-2 text-white">
+                <option value="" disabled selected>
+                  Dimension
+                </option>
+                {/* Add more options for dimensions */}
+              </select>
+            </div>
+          </div>
+          <div className="bg-white rounded-md p-4 shadow-md">
+            <div className="overflow-x-auto">
+              <table className="table max-[650px]:hidden">
+                {/* head */}
+                <thead>
+                  <tr className="text-lg">
+                    <th>Products</th>
+                    <th>Grade</th>
+                    <th>Location</th>
+                    <th>Prices</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {products.map((product) => (
+                    <Product key={product._id} product={product} />
                   ))}
-                </div>
-                <div className="border-t border-gray-700 pb-3 pt-4">
-                  <div className="flex items-center px-5">
-                    <div className="flex-shrink-0">
-                      <img
-                        className="h-10 w-10 rounded-full"
-                        src={user.imageUrl}
-                        alt=""
-                      />
-                    </div>
-                    <div className="ml-3">
-                      <div className="text-base font-medium leading-none text-white">
-                        {user.name}
-                      </div>
-                      <div className="text-sm font-medium leading-none text-gray-400">
-                        {user.email}
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      className="relative ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                    >
-                      <span className="absolute -inset-1.5" />
-                      <span className="sr-only">View notifications</span>
-                      <BellIcon className="h-6 w-6" aria-hidden="true" />
-                    </button>
-                  </div>
-                  <div className="mt-3 space-y-1 px-2">
-                    {userNavigation.map((item) => (
-                      <DisclosureButton
-                        key={item.name}
-                        as="a"
-                        href={item.href}
-                        className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
-                      >
-                        {item.name}
-                      </DisclosureButton>
-                    ))}
-                  </div>
-                </div>
-              </DisclosurePanel>
-            </>
-          )}
-        </Disclosure>
-
-        <header className="bg-white shadow">
-          <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-              Dashboard
-            </h1>
+                </tbody>
+                {/* foot */}
+              </table>
+              <div className="min-[650px]:hidden">
+                {products.map((product) => (
+                  <MobileProduct key={product._id} product={product} />
+                ))}
+              </div>
+            </div>
           </div>
-        </header>
-        <main>
-          <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-            {/* Your content */}
-          </div>
-        </main>
+        </div>
       </div>
     </>
   );
-}
+};
 
 export default DashboardPage;

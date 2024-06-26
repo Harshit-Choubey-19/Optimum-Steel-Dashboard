@@ -4,7 +4,6 @@ import DashboardPage from "./pages/Home/DashboardPage";
 import LoginPage from "./pages/auth/LoginPage";
 import SignUpPage from "./pages/auth/SignUpPage";
 import VerifyOtpPage from "./pages/verifyEmail/VerifyOtpPage";
-import VerifiedOtpPage from "./pages/verifyEmail/VerifiedOtpPage";
 
 import { Toaster } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";

@@ -5,6 +5,9 @@ import { MdOutlineMail } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
 import { MdPassword } from "react-icons/md";
 import { MdDriveFileRenameOutline } from "react-icons/md";
+import { BiShow } from "react-icons/bi";
+import { BiHide } from "react-icons/bi";
+
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import LoadingSpinner from "../../common/LoadingSpinner";
 
@@ -21,6 +24,7 @@ const SignUpPage = () => {
   });
 
   const [emailMsg, setEmailMsg] = useState("");
+  const [show, setShow] = useState(false);
 
   const { mutate, isError, isPending, error } = useMutation({
     mutationFn: async ({ email, username, fullName, password }) => {
@@ -64,11 +68,11 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="max-w-screen-md mx-auto flex h-screen px-10 bg-base-200">
+    <div className="max-w-screen-md mx-auto flex h-screen px-10">
       {/* <div className="flex-1 hidden lg:flex items-center  justify-center"></div> */}
 
       <div className="flex-1 flex flex-col justify-center items-center bg-base-100 shadow-lg">
-        <h2 className="text-4xl mb-16">Optimum Steels</h2>
+        <h2 className="text-black text-4xl mb-16">Optimum Steels</h2>
         <form
           className="lg:w-2/3 mx-auto md:mx-20 flex gap-4 flex-col"
           onSubmit={handleSubmit}
@@ -77,10 +81,10 @@ const SignUpPage = () => {
             Join today.
           </h1>
           <label className="input input-bordered rounded flex items-center gap-2">
-            <MdOutlineMail />
+            <MdOutlineMail className="text-black" />
             <input
               type="email"
-              className="grow"
+              className="grow text-black"
               placeholder="Email"
               name="email"
               onChange={handleInputChange}
@@ -89,10 +93,10 @@ const SignUpPage = () => {
           </label>
           <div className="flex gap-4 flex-wrap">
             <label className="input input-bordered rounded flex items-center gap-2 flex-1">
-              <FaUser />
+              <FaUser className="text-black" />
               <input
                 type="text"
-                className="grow "
+                className="grow text-black"
                 placeholder="Username"
                 name="username"
                 onChange={handleInputChange}
@@ -100,10 +104,10 @@ const SignUpPage = () => {
               />
             </label>
             <label className="input input-bordered rounded flex items-center gap-2 flex-1">
-              <MdDriveFileRenameOutline />
+              <MdDriveFileRenameOutline className="text-black" />
               <input
                 type="text"
-                className="grow"
+                className="grow text-black"
                 placeholder="Full Name"
                 name="fullName"
                 onChange={handleInputChange}
@@ -112,15 +116,26 @@ const SignUpPage = () => {
             </label>
           </div>
           <label className="input input-bordered rounded flex items-center gap-2">
-            <MdPassword />
+            <MdPassword className="text-black" />
             <input
-              type="password"
-              className="grow"
+              type={show ? "text" : "password"}
+              className="grow text-black"
               placeholder="Password"
               name="password"
               onChange={handleInputChange}
               value={formData.password}
             />
+            {show ? (
+              <BiHide
+                className="text-black cursor-pointer size-7 hover:bg-slate-200 hover:rounded-full"
+                onClick={() => setShow(!show)}
+              />
+            ) : (
+              <BiShow
+                className="text-black cursor-pointer size-7 hover:bg-slate-200 hover:rounded-full"
+                onClick={() => setShow(!show)}
+              />
+            )}
           </label>
           <button className="btn rounded-full btn-primary text-white">
             {isPending ? <LoadingSpinner /> : "Signup"}

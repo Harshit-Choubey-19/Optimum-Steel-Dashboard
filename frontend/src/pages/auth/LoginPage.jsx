@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 
 import { MdPassword } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
+import { BiShow } from "react-icons/bi";
+import { BiHide } from "react-icons/bi";
+
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import LoadingSpinner from "../../common/LoadingSpinner";
@@ -14,6 +17,8 @@ const LoginPage = () => {
   });
 
   const queryClient = useQueryClient();
+
+  const [show, setShow] = useState(false);
 
   const {
     mutate: loginMutation,
@@ -62,10 +67,10 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="max-w-screen-sm mx-auto flex px-10 bg-base-200 h-screen">
+    <div className="max-w-screen-sm mx-auto flex px-10 h-screen">
       {/* <div className="flex-2 hidden lg:flex items-center  justify-center"></div> */}
       <div className="flex-1 flex flex-col justify-center items-center bg-base-100 shadow-xl">
-        <h2 className="text-4xl mb-16">Optimum Steels</h2>
+        <h2 className="text-4xl mb-16 text-black">Optimum Steels</h2>
         <form
           className="lg:w-2/3  mx-auto md:mx-20 flex gap-4 flex-col"
           onSubmit={handleSubmit}
@@ -74,10 +79,10 @@ const LoginPage = () => {
             {"Let's"} go.
           </h1>
           <label className="input input-bordered rounded flex items-center gap-2">
-            <FaUser />
+            <FaUser className="text-black" />
             <input
               type="text"
-              className="grow"
+              className="grow text-black"
               placeholder="username"
               name="username"
               onChange={handleInputChange}
@@ -86,15 +91,26 @@ const LoginPage = () => {
           </label>
 
           <label className="input input-bordered rounded flex items-center gap-2">
-            <MdPassword />
+            <MdPassword className="text-black" />
             <input
-              type="password"
-              className="grow"
+              type={show ? "text" : "password"}
+              className="grow text-black"
               placeholder="Password"
               name="password"
               onChange={handleInputChange}
               value={formData.password}
             />
+            {show ? (
+              <BiHide
+                className="text-black cursor-pointer size-7 hover:bg-slate-200 hover:rounded-full"
+                onClick={() => setShow(!show)}
+              />
+            ) : (
+              <BiShow
+                className="text-black cursor-pointer size-7 hover:bg-slate-200 hover:rounded-full"
+                onClick={() => setShow(!show)}
+              />
+            )}
           </label>
           <button className="btn rounded-full btn-primary text-white">
             {isPending ? <LoadingSpinner /> : "Login"}
