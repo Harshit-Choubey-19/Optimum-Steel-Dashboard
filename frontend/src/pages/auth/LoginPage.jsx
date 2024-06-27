@@ -5,6 +5,7 @@ import { MdPassword } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
 import { BiShow } from "react-icons/bi";
 import { BiHide } from "react-icons/bi";
+import { IoMdClose } from "react-icons/io";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
@@ -70,6 +71,9 @@ const LoginPage = () => {
     <div className="max-w-screen-sm mx-auto flex px-10 h-screen">
       {/* <div className="flex-2 hidden lg:flex items-center  justify-center"></div> */}
       <div className="flex-1 flex flex-col justify-center items-center bg-base-100 shadow-xl">
+        <Link to={"/"}>
+          <IoMdClose className="size-8 absolute top-5 hover:scale-105" />
+        </Link>
         <h2 className="text-4xl mb-16 text-black">Optimum Steels</h2>
         <form
           className="lg:w-2/3  mx-auto md:mx-20 flex gap-4 flex-col"

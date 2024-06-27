@@ -4,6 +4,7 @@ import SideBar from "../../components/SideBar";
 import Product from "../../components/Product";
 import img from "../../images/steel.jpg";
 import MobileProduct from "../../components/MobileProduct";
+import Footer from "../../components/Footer";
 
 const DashboardPage = () => {
   const [products, setProducts] = useState([
@@ -57,16 +58,26 @@ const DashboardPage = () => {
       price: "₹15,000",
       createdAt: null,
     },
+    {
+      id: 6,
+      itemName: "CRC IS518",
+      grade: "Primary",
+      itemImg: img,
+      dimension: "Primary 0.60mm",
+      location: "kanpur",
+      price: "₹20,000",
+      createdAt: null,
+    },
   ]);
 
   return (
     <>
       <NavBar />
 
-      <div className="flex">
+      <div className="flex overflow-auto">
         <SideBar />
         <div className="w-full p-3">
-          <div className="bg-white rounded-md p-4 shadow-md mb-4">
+          <div className="bg-white rounded-md p-4 shadow-2xl mb-4">
             <h2 className="text-2xl font-bold mb-2 text-black">
               CRC Prices Today
             </h2>
@@ -108,7 +119,7 @@ const DashboardPage = () => {
               </select>
             </div>
           </div>
-          <div className="bg-white rounded-md p-4 shadow-md">
+          <div className="bg-white rounded-md p-4 shadow-xl">
             <div className="overflow-x-auto">
               <table className="table max-[650px]:hidden">
                 {/* head */}
@@ -137,6 +148,7 @@ const DashboardPage = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

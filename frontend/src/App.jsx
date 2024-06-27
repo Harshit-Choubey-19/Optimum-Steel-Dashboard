@@ -59,12 +59,7 @@ function App() {
   return (
     <div>
       <Routes>
-        <Route
-          path="/"
-          element={
-            authUser && check ? <DashboardPage /> : <Navigate to="/login" />
-          }
-        />
+        <Route path="/" element={<DashboardPage />} />
         <Route
           path="/signup"
           element={!authUser ? <SignUpPage /> : <Navigate to="/verifyOtp" />}

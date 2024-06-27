@@ -12,6 +12,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import LoadingSpinner from "../../common/LoadingSpinner";
 
 import toast from "react-hot-toast";
+import { IoMdClose } from "react-icons/io";
 
 const SignUpPage = () => {
   const queryClient = useQueryClient();
@@ -72,6 +73,9 @@ const SignUpPage = () => {
       {/* <div className="flex-1 hidden lg:flex items-center  justify-center"></div> */}
 
       <div className="flex-1 flex flex-col justify-center items-center bg-base-100 shadow-lg">
+        <Link to={"/"}>
+          <IoMdClose className="size-8 absolute top-4 hover:scale-105" />
+        </Link>
         <h2 className="text-black text-4xl mb-16">Optimum Steels</h2>
         <form
           className="lg:w-2/3 mx-auto md:mx-20 flex gap-4 flex-col"

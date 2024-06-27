@@ -40,7 +40,7 @@ const NavBar = () => {
   const { data: authUser } = useQuery({ queryKey: ["authUser"] });
 
   return (
-    <div className="navbar bg-base-100">
+    <div className="navbar bg-base-100 shadow-md sticky top-0 left-0 w-full z-50">
       <div className="flex-1">
         <Link className="text-2xl mr-2" to={"/"}>
           <h1 className="font-bold">
@@ -49,7 +49,10 @@ const NavBar = () => {
         </Link>
       </div>
       <div className="flex-none gap-2">
-        <div className="dropdown dropdown-end">
+        <Link className={`${authUser ? "hidden" : "block"}`} to={"/login"}>
+          <button className="btn btn-outline btn-info btn-lg">Login</button>
+        </Link>
+        <div className={`dropdown dropdown-end ${authUser ? "" : "hidden"}`}>
           <div
             tabIndex={0}
             role="button"
@@ -58,7 +61,7 @@ const NavBar = () => {
             <div className="w-10 rounded-full">
               <img
                 alt="Tailwind CSS Navbar component"
-                src={authUser.profileImg ? authUser.profileImg : avatar}
+                src={authUser?.profileImg ? authUser?.profileImg : avatar}
               />
             </div>
           </div>

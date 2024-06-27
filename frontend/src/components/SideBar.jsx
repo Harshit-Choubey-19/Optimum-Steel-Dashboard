@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useMediaQuery } from "react-responsive";
 import {
   ChevronDownIcon,
   ChevronUpIcon,
   MagnifyingGlassIcon,
-  HeartIcon,
 } from "@heroicons/react/24/outline";
 import { IoCloseOutline } from "react-icons/io5";
 import { IoMdMenu } from "react-icons/io";
@@ -12,6 +12,7 @@ const SideBar = () => {
   const [isFlatProductsOpen, setIsFlatProductsOpen] = useState(true);
   const [isLongProductsOpen, setIsLongProductsOpen] = useState(true);
   const [show, setShow] = useState(true);
+  const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
 
   const toggleFlatProducts = () => {
     setIsFlatProductsOpen(!isFlatProductsOpen);
@@ -20,6 +21,12 @@ const SideBar = () => {
   const toggleLongProducts = () => {
     setIsLongProductsOpen(!isLongProductsOpen);
   };
+
+  useEffect(() => {
+    if (isDesktop) {
+      setShow(true);
+    }
+  }, [isDesktop]);
 
   return (
     <>
@@ -32,7 +39,7 @@ const SideBar = () => {
         </div>
       )}
       <div
-        className={`bg-blue-100 p-4 rounded-md shadow-md w-auto block transition-all duration-500 ${
+        className={`bg-blue-100 p-4 rounded-md shadow-md w-auto block transition-all duration-500  ${
           show ? "" : "hidden"
         }`}
       >
