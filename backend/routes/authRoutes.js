@@ -6,6 +6,7 @@ import {
   getMe,
   verifyOtp,
   resendOtp,
+  cancellVerification,
 } from "../controllers/authController.js";
 import { protectRoute } from "../middleware/protectRoute.js";
 
@@ -17,5 +18,6 @@ router.post("/login", login);
 router.post("/logout", logout);
 router.post("/verifyOtp", protectRoute, verifyOtp);
 router.post("/resendOtp", protectRoute, resendOtp);
+router.post("/cancellVerify", protectRoute, cancellVerification);
 
 export default router;

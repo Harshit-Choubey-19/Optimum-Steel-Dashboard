@@ -2,8 +2,6 @@ import bcrypt from "bcryptjs";
 import UserOtpVerification from "../../models/userOtpVerification.js";
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
-import emailValidator from "email-validator";
-import clearbit from "clearbit";
 
 dotenv.config();
 
@@ -18,40 +16,17 @@ let transporter = nodemailer.createTransport({
   },
 });
 
-transporter.verify((error, success) => {
-  if (error) {
-    console.log(error);
-  } else {
-    console.log("Server is ready to take our messages");
-    console.log(success);
-  }
-});
-
-async function isEmailValid(email) {
-  const check = emailValidator.validate(email);
-  return check;
-  // Enhanced validation using Clearbit
-  // try {
-  //   const response = await clearbit.Enrichment.find(email);
-  //   if (response.status === "invalid") {
-  //     return false;
-  //   }
-  // } catch (error) {
-  //   console.error("Error validating email address:", error);
-  //   return false;
-  // }
-  // return true;
-}
+// transporter.verify((error, success) => {
+//   if (error) {
+//     console.log(error);
+//   } else {
+//     console.log("Server is ready to take our messages");
+//     console.log(success);
+//   }
+// });
 
 export const sendOtpVerificationEmail = async (user, res) => {
   try {
-    // Validate email
-    const emailValid = await isEmailValid(user.email);
-    if (!emailValid) {
-      console.log(`Invalid email format: ${user.email}`);
-      return false; // OTP sending failed due to invalid email
-    }
-
     const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
     const salt = await bcrypt.genSalt(10);
     const hashedOtp = await bcrypt.hash(otp, salt);
