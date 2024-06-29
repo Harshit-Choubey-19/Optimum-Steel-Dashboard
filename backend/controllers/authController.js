@@ -8,21 +8,16 @@ import UserOtpVerification from "../models/userOtpVerification.js";
 
 export const signup = async (req, res) => {
   try {
-    const { fullName, username, email, password } = req.body;
+    const { fullName, email, password } = req.body;
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!fullName || !username || !email || !password) {
+    if (!fullName || !email || !password) {
       return res.status(400).json({ error: "Please fill all fields" });
     }
 
     if (!emailRegex.test(email)) {
       return res.status(400).json({ error: "Invalid email format" });
-    }
-
-    const existinguser = await User.findOne({ username });
-    if (existinguser) {
-      return res.status(400).json({ error: "Username is already taken" });
     }
 
     const existingemail = await User.findOne({ email });
@@ -40,13 +35,11 @@ export const signup = async (req, res) => {
         .json({ error: "Password must be at least 6 characters long" });
     }
     //hashed password
-    const randomNum = Math.floor(Math.random() * 11) + 10; //random num between 10 to 20
-    const salt = await bcrypt.genSalt(randomNum);
+    const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const newUser = new User({
       fullName,
-      username,
       email,
       password: hashedPassword,
     });
@@ -67,7 +60,6 @@ export const signup = async (req, res) => {
         "An Otp sent to your email address, please verify(Check your spam if its not visible in inbox).",
       date: {
         _id: newUser._id,
-        username: newUser.username,
         fullName: newUser.fullName,
         role: newUser.role,
         email: newUser.email,
@@ -82,13 +74,13 @@ export const signup = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const { username, password } = req.body;
-    const user = await User.findOne({ username });
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
 
-    if (!username || !password) {
+    if (!email || !password) {
       return res
         .status(400)
-        .json({ error: "Please provide both username and password" });
+        .json({ error: "Please provide both email and password" });
     }
 
     const isPasswordCorrect = await bcrypt.compare(
@@ -97,13 +89,13 @@ export const login = async (req, res) => {
     );
 
     if (!user || !isPasswordCorrect) {
-      return res.status(400).json({ error: "Invalid username or password" });
+      return res.status(400).json({ error: "Invalid email or password" });
     }
 
     generateTokenAndSetCookie(user._id, res);
 
     if (!user.verified) {
-      let otpRecord = await UserOtpVerification.findOne({ userId: user._id });
+      const otpRecord = await UserOtpVerification.findOne({ userId: user._id });
       if (!otpRecord) {
         const emailSent = await sendOtpVerificationEmail(user, res);
 
@@ -117,18 +109,19 @@ export const login = async (req, res) => {
       } else {
         return res
           .status(200)
-          .json({ message: "otp already sent please verify!" });
+          .json({ message: "Otp already sent please verify!" });
       }
     }
 
     res.status(200).json({
-      _id: user._id,
-      fullName: user.fullName,
-      username: user.username,
-      email: user.email,
-      profileImg: user.profileImg,
-      role: user.role,
-      verified: user.verified,
+      message: "Login successfull!",
+      data: {
+        _id: user._id,
+        email: user.email,
+        fullname: user.fullName,
+        role: user.role,
+        verified: user.verified,
+      },
     });
   } catch (error) {
     console.log("Error in login controller", error.message);

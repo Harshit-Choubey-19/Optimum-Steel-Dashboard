@@ -13,7 +13,7 @@ let transporter = nodemailer.createTransport({
 });
 
 export const updateUser = async (req, res) => {
-  const { fullName, username, currentPassword, newPassword } = req.body;
+  const { fullName, currentPassword, newPassword } = req.body;
   let { profileImg } = req.body;
   const userId = req.user._id;
   try {
@@ -28,11 +28,6 @@ export const updateUser = async (req, res) => {
     let user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
-    }
-
-    const existinguser = await User.findOne({ username });
-    if (existinguser) {
-      return res.status(400).json({ error: "Username is already taken" });
     }
 
     if (!user.verified) {
@@ -52,6 +47,12 @@ export const updateUser = async (req, res) => {
       const isMatch = await bcrypt.compare(currentPassword, user.password);
       if (!isMatch) {
         return res.status(400).json({ error: "Current password is incorrect" });
+      }
+
+      if (newPassword === currentPassword) {
+        return res
+          .status(400)
+          .json({ error: "New password cannot be same as current password" });
       }
 
       if (newPassword.length < 6) {
@@ -78,7 +79,6 @@ export const updateUser = async (req, res) => {
     }
 
     user.fullName = fullName || user.fullName;
-    user.username = username || user.username;
     user.profileImg = profileImg || user.profileImg;
 
     user = await user.save();
