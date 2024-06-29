@@ -11,7 +11,7 @@ import { IoMdMenu } from "react-icons/io";
 const SideBar = () => {
   const [isFlatProductsOpen, setIsFlatProductsOpen] = useState(true);
   const [isLongProductsOpen, setIsLongProductsOpen] = useState(true);
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
   const isDesktop = useMediaQuery({ query: "(min-width: 1024px)" });
 
   const toggleFlatProducts = () => {
@@ -31,15 +31,15 @@ const SideBar = () => {
   return (
     <>
       {!show && (
-        <div className=" w-8 h-8 transition-all duration-500">
+        <div className=" w-8 h-8 transition-all duration-500 mt-2">
           <IoMdMenu
-            className="size-8 cursor-pointer hover:scale-x-110"
+            className="size-10 cursor-pointer hover:scale-x-110"
             onClick={() => setShow(true)}
           />
         </div>
       )}
       <div
-        className={`bg-blue-100 p-4 rounded-md shadow-md w-auto block transition-all duration-500  ${
+        className={`bg-base-300 p-4 rounded-md w-auto block transition-all duration-500  ${
           show ? "" : "hidden"
         }`}
       >

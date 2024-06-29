@@ -52,6 +52,13 @@ const NavBar = () => {
         <Link className={`${authUser ? "hidden" : "block"}`} to={"/login"}>
           <button className="btn btn-outline btn-info btn-lg">Login</button>
         </Link>
+        <div className={`${authUser?.role === "admin" ? "block" : "hidden"}`}>
+          <Link to={"/admin"} className="max-[535px]:hidden">
+            <span className="badge badge-neutral badge-lg">
+              <b>Go to Admin Dashboard</b>
+            </span>
+          </Link>
+        </div>
         <div className={`dropdown dropdown-end ${authUser ? "" : "hidden"}`}>
           <div
             tabIndex={0}
@@ -70,11 +77,16 @@ const NavBar = () => {
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
           >
             <li>
-              <a className="justify-between">Profile</a>
+              <a href={`/profile/${authUser?._id}`} className="justify-between">
+                Profile&nbsp;
+                <span className="badge badge-neutral">{authUser?.role}</span>
+              </a>
             </li>
-            <li>
-              <a>Settings</a>
-            </li>
+            {authUser?.role === "admin" && (
+              <li className="min-[535px]:hidden">
+                <a href="/admin">Admin Dahboard</a>
+              </li>
+            )}
             <li>
               <button onClick={handleClick}>Logout</button>
             </li>

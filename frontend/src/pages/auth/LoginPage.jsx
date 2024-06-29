@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import { MdPassword } from "react-icons/md";
-import { FaUser } from "react-icons/fa";
+import { MdOutlineMail, MdPassword } from "react-icons/md";
 import { BiShow } from "react-icons/bi";
 import { BiHide } from "react-icons/bi";
 import { IoMdClose } from "react-icons/io";
@@ -13,7 +12,7 @@ import LoadingSpinner from "../../common/LoadingSpinner";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
-    username: "",
+    email: "",
     password: "",
   });
 
@@ -27,14 +26,14 @@ const LoginPage = () => {
     isError,
     error,
   } = useMutation({
-    mutationFn: async ({ username, password }) => {
+    mutationFn: async ({ email, password }) => {
       try {
         const res = await fetch("/api/auth/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ username, password }),
+          body: JSON.stringify({ email, password }),
         });
         const data = await res.json();
 
@@ -48,11 +47,14 @@ const LoginPage = () => {
     },
     onSuccess: (data) => {
       console.log(data);
-      if (data.message === "An email sent to your account please verify!") {
-        toast.success("An email sent to your account please verify!");
+      if (
+        data.message === "An OTP sent to your email please verify!" ||
+        data.message === "OTP already sent please verify!"
+      ) {
+        toast.success(data.message);
         queryClient.invalidateQueries({ queryKey: ["authUser"] });
       } else {
-        toast.success("Login successful!");
+        toast.success(data.message);
         queryClient.invalidateQueries({ queryKey: ["authUser"] });
       }
     },
@@ -83,14 +85,14 @@ const LoginPage = () => {
             {"Let's"} go.
           </h1>
           <label className="input input-bordered rounded flex items-center gap-2">
-            <FaUser className="text-black" />
+            <MdOutlineMail className="text-black" />
             <input
-              type="text"
+              type="email"
               className="grow text-black"
-              placeholder="username"
-              name="username"
+              placeholder="Email"
+              name="email"
               onChange={handleInputChange}
-              value={formData.username}
+              value={formData.email}
             />
           </label>
 

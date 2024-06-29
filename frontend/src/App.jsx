@@ -11,9 +11,13 @@ import LoadingSpinner from "./common/LoadingSpinner";
 import { useState } from "react";
 import ErrorPage from "./pages/error/ErrorPage";
 import ContactSupportPage from "./pages/error/ContactSupportPage";
+import ProfilePage from "./pages/user/ProfilePage";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import CreateProduct from "./pages/admin/pages/CreateProduct";
 
 function App() {
   const [check, setCheck] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const {
     data: authUser,
@@ -32,12 +36,17 @@ function App() {
         if (!res.ok) {
           throw new Error(data.error || "Something went wrong!");
         }
-        console.log("AuthUser is here:", data);
 
         if (data.verified) {
           setCheck(true);
         } else {
           setCheck(false);
+        }
+
+        if (data.role === "admin") {
+          setIsAdmin(true);
+        } else {
+          setIsAdmin(false);
         }
 
         return data;
@@ -74,6 +83,30 @@ function App() {
         />
         <Route path="*" element={<ErrorPage />} />
         <Route path="/contact" element={<ContactSupportPage />} />
+        <Route
+          path="/profile/:id"
+          element={authUser && check ? <ProfilePage /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/admin"
+          element={
+            authUser && check && isAdmin ? (
+              <AdminDashboard />
+            ) : (
+              <Navigate to={"/"} />
+            )
+          }
+        />
+        <Route
+          path="/admin/create"
+          element={
+            authUser && check && isAdmin ? (
+              <CreateProduct />
+            ) : (
+              <Navigate to="/" />
+            )
+          }
+        />
       </Routes>
       <Toaster />
     </div>
