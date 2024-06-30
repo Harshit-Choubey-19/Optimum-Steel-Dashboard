@@ -69,11 +69,13 @@ const SignUpPage = () => {
     <div className="max-w-screen-md mx-auto flex h-screen px-10">
       {/* <div className="flex-1 hidden lg:flex items-center  justify-center"></div> */}
 
-      <div className="flex-1 flex flex-col justify-center items-center bg-base-100 shadow-lg">
+      <div className="flex-1 flex flex-col justify-center items-center bg-base-100 shadow-xl mt-3 mb-3 rounded-md">
         <Link to={"/"}>
-          <IoMdClose className="size-8 absolute top-4 hover:scale-105" />
+          <IoMdClose className="size-8 absolute top-5 hover:scale-105" />
         </Link>
-        <h2 className="text-black text-4xl mb-16">Optimum Steels</h2>
+        <h2 className="text-3xl mb-16 text-black font-bold">
+          Optimum&nbsp;<span className="text-blue-500 font-bold">Steels</span>
+        </h2>
         <form
           className="lg:w-2/3 mx-auto md:mx-20 flex gap-4 flex-col"
           onSubmit={handleSubmit}

@@ -48,7 +48,13 @@ const NavBar = () => {
           </h1>
         </Link>
       </div>
-      <div className="flex-none gap-2">
+      <div className="flex-none gap-5">
+        <Link className="max-[739px]:hidden">
+          <button className="btn btn-outline btn-lg">Auction</button>
+        </Link>
+        <Link className="max-[739px]:hidden">
+          <button className="btn btn-outline btn-lg">News</button>
+        </Link>
         <Link className={`${authUser ? "hidden" : "block"}`} to={"/login"}>
           <button className="btn btn-outline btn-info btn-lg">Login</button>
         </Link>
@@ -87,6 +93,12 @@ const NavBar = () => {
                 <a href="/admin">Admin Dahboard</a>
               </li>
             )}
+            <li className="min-[740px]:hidden">
+              <a>Auction</a>
+            </li>
+            <li className="min-[740px]:hidden">
+              <a>News</a>
+            </li>
             <li>
               <button onClick={handleClick}>Logout</button>
             </li>

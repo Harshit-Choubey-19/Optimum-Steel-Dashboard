@@ -1,74 +1,38 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NavBar from "../../components/NavBar";
 import SideBar from "../../components/SideBar";
 import Product from "../../components/Product";
-import img from "../../images/steel.jpg";
 import MobileProduct from "../../components/MobileProduct";
 import Footer from "../../components/Footer";
+import LoadingSpinner from "../../common/LoadingSpinner";
+
+import { useQuery } from "@tanstack/react-query";
 
 const DashboardPage = () => {
-  const [products, setProducts] = useState([
-    {
-      id: 1,
-      itemName: "CRC IS513",
-      grade: "Primary",
-      itemImg: img,
-      dimension: "Primary 0.90mm",
-      location: "Delhi",
-      price: "₹62,000",
-      createdAt: "1 day ago",
+  const {
+    data: products,
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["products"],
+    queryFn: async () => {
+      try {
+        const res = await fetch("/api/products");
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || "Something went wrong");
+        }
+        return data;
+      } catch (error) {
+        throw new Error(error);
+      }
     },
-    {
-      id: 2,
-      itemName: "CRC IS514",
-      grade: "-",
-      itemImg: img,
-      dimension: "Primary 0.90mm",
-      location: "Delhi",
-      price: "₹65,000",
-      createdAt: "21 hours ago",
-    },
-    {
-      id: 3,
-      itemName: "CRC IS515",
-      grade: "-",
-      itemImg: img,
-      dimension: "Primary 0.80mm",
-      location: "Faridabad",
-      price: "₹75,000",
-      createdAt: null,
-    },
-    {
-      id: 4,
-      itemName: "CRC IS516",
-      grade: "-",
-      itemImg: img,
-      dimension: "Primary 0.60mm",
-      location: "Ludhiana",
-      price: "₹25,000",
-      createdAt: null,
-    },
-    {
-      id: 5,
-      itemName: "CRC IS517",
-      grade: "-",
-      itemImg: img,
-      dimension: "Primary 0.70mm",
-      location: "Ahmedabad",
-      price: "₹15,000",
-      createdAt: null,
-    },
-    {
-      id: 6,
-      itemName: "CRC IS518",
-      grade: "Primary",
-      itemImg: img,
-      dimension: "Primary 0.60mm",
-      location: "kanpur",
-      price: "₹20,000",
-      createdAt: null,
-    },
-  ]);
+  });
+
+  useEffect(() => {
+    refetch();
+  }, [products, refetch]);
 
   return (
     <>
@@ -133,16 +97,24 @@ const DashboardPage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {products.map((product) => (
-                    <Product key={product._id} product={product} />
-                  ))}
+                  {isLoading ? (
+                    <LoadingSpinner size="3xl" />
+                  ) : (
+                    products.map((product) => (
+                      <Product key={product._id} product={product} />
+                    ))
+                  )}
                 </tbody>
                 {/* foot */}
               </table>
               <div className="min-[650px]:hidden">
-                {products.map((product) => (
-                  <MobileProduct key={product._id} product={product} />
-                ))}
+                {isLoading ? (
+                  <LoadingSpinner size="3xl" />
+                ) : (
+                  products.map((product) => (
+                    <MobileProduct key={product._id} product={product} />
+                  ))
+                )}
               </div>
             </div>
           </div>

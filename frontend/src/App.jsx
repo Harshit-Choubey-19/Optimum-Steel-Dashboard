@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes, useParams } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 
 import DashboardPage from "./pages/Home/DashboardPage";
 import LoginPage from "./pages/auth/LoginPage";
@@ -12,8 +12,8 @@ import { useState } from "react";
 import ErrorPage from "./pages/error/ErrorPage";
 import ContactSupportPage from "./pages/error/ContactSupportPage";
 import ProfilePage from "./pages/user/ProfilePage";
-import AdminDashboard from "./pages/admin/AdminDashboard";
 import CreateProduct from "./pages/admin/pages/CreateProduct";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 
 function App() {
   const [check, setCheck] = useState(false);
