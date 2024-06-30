@@ -4,7 +4,7 @@ import { v2 as cloudinary } from "cloudinary";
 
 export const createProduct = async (req, res) => {
   try {
-    const { itemName, grade, brand, location, price } = req.body;
+    const { itemName, grade, brand, location, price, dimension } = req.body;
     let { itemImg } = req.body;
     const userId = req.user._id.toString();
 
@@ -13,7 +13,7 @@ export const createProduct = async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    if (!itemName && !grade && !brand && !location && !price && !itemImg) {
+    if (!itemName || !brand || !location || !price || !dimension || !grade) {
       return res.status(400).json({ error: "Please fill in all fields" });
     }
 
@@ -28,6 +28,7 @@ export const createProduct = async (req, res) => {
       itemImg,
       grade,
       brand,
+      dimension,
       location,
       price,
     });
@@ -71,7 +72,7 @@ export const deleteProduct = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
   try {
-    const { itemName, grade, brand, location, price } = req.body;
+    const { itemName, grade, brand, location, price, dimension } = req.body;
     let { itemImg } = req.body;
 
     const { id } = req.params;
@@ -102,6 +103,7 @@ export const updateProduct = async (req, res) => {
     product.brand = brand || product.brand;
     product.location = location || product.location;
     product.price = price || product.price;
+    product.dimension = dimension || product.dimension;
 
     product = await product.save();
 
