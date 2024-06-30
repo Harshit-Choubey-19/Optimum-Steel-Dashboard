@@ -17,8 +17,13 @@ const productSchema = new mongoose.Schema(
     },
     grade: {
       type: String,
+      required: true,
     },
     brand: {
+      type: String,
+      required: true,
+    },
+    dimension: {
       type: String,
       required: true,
     },

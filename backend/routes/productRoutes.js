@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.get("/", getProducts);
 router.post("/create", adminProtectRoute, createProduct);
-router.post("/:id", adminProtectRoute, updateProduct);
+router.patch("/:id", adminProtectRoute, updateProduct);
 router.delete("/:id", adminProtectRoute, deleteProduct);
 
 export default router;
