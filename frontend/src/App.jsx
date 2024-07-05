@@ -14,6 +14,8 @@ import ContactSupportPage from "./pages/error/ContactSupportPage";
 import ProfilePage from "./pages/user/ProfilePage";
 import CreateProduct from "./pages/admin/pages/CreateProduct";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import MainAuctionPage from "./pages/auction/MainAuctionPage";
+import AuctionItemDetail from "./pages/auction/AuctionItemDetail";
 
 function App() {
   const [check, setCheck] = useState(false);
@@ -105,6 +107,18 @@ function App() {
             ) : (
               <Navigate to="/" />
             )
+          }
+        />
+        <Route
+          path="/auction"
+          element={
+            authUser && check ? <MainAuctionPage /> : <Navigate to="/" />
+          }
+        />
+        <Route
+          path="/auction/:id"
+          element={
+            authUser && check ? <AuctionItemDetail /> : <Navigate to="/" />
           }
         />
       </Routes>

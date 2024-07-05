@@ -146,7 +146,9 @@ const AdminProduct = ({ product }) => {
                 <div className="font-bold">
                   {itemName}
                   <span
-                    className="tooltip cursor-pointer ml-2"
+                    className={`tooltip cursor-pointer ml-2 ${
+                      !isOwner && "hidden"
+                    }`}
                     data-tip="Double-click to edit"
                   >
                     <FaPencilAlt className="text-gray-500 size-2.5" />
@@ -160,16 +162,20 @@ const AdminProduct = ({ product }) => {
         </td>
         <td onDoubleClick={handleDoubleClick}>
           {editMode ? (
-            <input
-              type="text"
+            <select
               value={grade}
               onChange={(e) => handleEditChange(e, "grade")}
-            />
+            >
+              <option value="Grade 1">Grade 1</option>
+              <option value="Grade 2">Grade 2</option>
+            </select>
           ) : (
             <p className="text-sm">
               {grade}
               <span
-                className="tooltip cursor-pointer ml-2"
+                className={`tooltip cursor-pointer ml-2 ${
+                  !isOwner && "hidden"
+                }`}
                 data-tip="Double-click to edit"
               >
                 <FaPencilAlt className="text-gray-500 size-2.5" />
@@ -179,16 +185,22 @@ const AdminProduct = ({ product }) => {
         </td>
         <td onDoubleClick={handleDoubleClick}>
           {editMode ? (
-            <input
-              type="text"
+            <select
               value={location}
               onChange={(e) => handleEditChange(e, "location")}
-            />
+            >
+              <option value="New Delhi">New Delhi</option>
+              <option value="Hyderabad">Hyderabad</option>
+              <option value="Faridabad">Faridabad</option>
+              <option value="Banglore">Banglore</option>
+            </select>
           ) : (
             <p className="text-sm">
               {location}
               <span
-                className="tooltip cursor-pointer ml-2"
+                className={`tooltip cursor-pointer ml-2 ${
+                  !isOwner && "hidden"
+                }`}
                 data-tip="Double-click to edit"
               >
                 <FaPencilAlt className="text-gray-500 size-2.5" />
@@ -207,7 +219,9 @@ const AdminProduct = ({ product }) => {
             <p>
               ₹&nbsp;{price.toLocaleString("en-IN")}
               <span
-                className="tooltip cursor-pointer ml-2"
+                className={`tooltip cursor-pointer ml-2 ${
+                  !isOwner && "hidden"
+                }`}
                 data-tip="Double-click to edit"
               >
                 <FaPencilAlt className="text-gray-500 size-2.5" />

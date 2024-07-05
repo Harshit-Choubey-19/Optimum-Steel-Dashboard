@@ -39,7 +39,7 @@ const AdminDashboard = () => {
   return (
     <>
       <NavBar />
-      <div className="flex overflow-auto custom-scrollbar">
+      <div className="flex overflow-auto">
         <AdminSidebar />
         <div className="w-full p-3">
           <div className="bg-white rounded-md p-4 shadow-xl mb-12 mt-1">
@@ -80,21 +80,6 @@ const AdminDashboard = () => {
         </div>
       </div>
       {isDesktop && <Footer />}
-      <style>
-        {`
-         .custom-scrollbar::-webkit-scrollbar {
-            width: 30px;
-            height: 10px;
-          }
-         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background-color: #ccc;
-            border-radius: 10px;
-          }
-         .custom-scrollbar::-webkit-scrollbar-track {
-            background-color: #f0f0f0;
-          }
-        `}
-      </style>
     </>
   );
 };

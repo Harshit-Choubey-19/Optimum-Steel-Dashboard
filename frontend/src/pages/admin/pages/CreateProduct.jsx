@@ -176,6 +176,8 @@ const CreateProduct = () => {
                   </option>
                   <option value="New Delhi">New Delhi</option>
                   <option value="Hyderabad">Hyderabad</option>
+                  <option value="Faridabad">Faridabad</option>
+                  <option value="Banglore">Banglore</option>
                 </select>
               </div>
               <div className="form-control mt-2">

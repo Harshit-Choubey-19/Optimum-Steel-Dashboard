@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import avatar from "../images/avatar.png";
+import { IoMenu } from "react-icons/io5";
 
 const NavBar = () => {
   const queryClient = useQueryClient();
@@ -49,15 +50,61 @@ const NavBar = () => {
         </Link>
       </div>
       <div className="flex-none gap-5">
-        <Link className="max-[739px]:hidden">
-          <button className="btn btn-outline btn-lg">Auction</button>
+        <Link className="max-[740px]:hidden" to={"/auction"}>
+          <button
+            className="btn btn-outline btn-lg"
+            onClick={(e) => {
+              if (!authUser) {
+                e.preventDefault();
+                toast.error("Please login to access auction page");
+              }
+            }}
+          >
+            Auction
+          </button>
         </Link>
-        <Link className="max-[739px]:hidden">
+        <Link className="max-[740px]:hidden">
           <button className="btn btn-outline btn-lg">News</button>
         </Link>
-        <Link className={`${authUser ? "hidden" : "block"}`} to={"/login"}>
+        <Link
+          className={`${authUser ? "hidden" : "block max-[740px]:hidden"}`}
+          to={"/login"}
+        >
           <button className="btn btn-outline btn-info btn-lg">Login</button>
         </Link>
+        <div
+          className={`dropdown dropdown-end min-[741px]:hidden ${
+            authUser ? "hidden" : "block"
+          }`}
+        >
+          <div tabIndex={0} role="button">
+            <IoMenu className="size-8" />
+          </div>
+          <ul
+            tabIndex={0}
+            className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
+          >
+            <li>
+              <a href="/login">Login</a>
+            </li>
+            <li>
+              <a
+                href="/auction"
+                onClick={(e) => {
+                  if (!authUser) {
+                    e.preventDefault();
+                    toast.error("Please login to access auction page");
+                  }
+                }}
+              >
+                Auction
+              </a>
+            </li>
+            <li>
+              <a>News</a>
+            </li>
+          </ul>
+        </div>
         <div className={`${authUser?.role === "admin" ? "block" : "hidden"}`}>
           <Link to={"/admin"} className="max-[535px]:hidden">
             <span className="badge badge-neutral badge-lg">
@@ -94,7 +141,17 @@ const NavBar = () => {
               </li>
             )}
             <li className="min-[740px]:hidden">
-              <a>Auction</a>
+              <a
+                href="/auction"
+                onClick={(e) => {
+                  if (!authUser) {
+                    e.preventDefault();
+                    toast.error("Please login to access auction page");
+                  }
+                }}
+              >
+                Auction
+              </a>
             </li>
             <li className="min-[740px]:hidden">
               <a>News</a>
