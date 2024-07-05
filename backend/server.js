@@ -6,6 +6,7 @@ import { v2 as cloudinary } from "cloudinary";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
+import auctionRoutes from "./routes/auctionRoutes.js";
 import connectMongoDB from "./db/connectMongoDB.js";
 
 dotenv.config();
@@ -27,6 +28,7 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/auctions", auctionRoutes);
 
 app.get("*", (req, res) => {
   res.status(404).json({ message: "Route not found" });
