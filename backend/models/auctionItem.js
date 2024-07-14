@@ -23,11 +23,11 @@ const auctionItemSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    title: {
+    companyName: {
       type: String,
       required: true,
     },
-    description: {
+    itemName: {
       type: String,
       required: true,
     },
@@ -50,11 +50,13 @@ const auctionItemSchema = new mongoose.Schema(
       },
     },
     bids: [bidSchema],
-    startdate: {
+    startDate: {
       type: Date,
+      required: true,
     },
     endDate: {
       type: Date,
+      required: true,
     },
   },
   { timestamps: true }

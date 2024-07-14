@@ -19,11 +19,23 @@ export const getAuctionItems = async (req, res) => {
 export const getSingleAuctionItem = async (req, res) => {
   try {
     const itemId = req.params.id;
-    const auctionItem = await AuctionItem.findById(itemId);
+    const auctionItem = await AuctionItem.findById(itemId)
+      .populate({
+        path: "bids",
+        populate: { path: "user", select: "-password" },
+      })
+      .populate({
+        path: "highestBid",
+        populate: {
+          path: "user",
+          select: "-password",
+        },
+      });
 
     if (!auctionItem) {
       return res.status(404).json({ error: "Auction item not found" });
     }
+
     return res.status(200).json(auctionItem);
   } catch (error) {
     console.log("Error in getSingleAuctionItem:", error.message);
@@ -33,8 +45,8 @@ export const getSingleAuctionItem = async (req, res) => {
 
 export const createAuctionItem = async (req, res) => {
   try {
-    const { title, description, startPrice, startDate, endDate } = req.body;
-    const { image } = req.body;
+    const { itemName, startPrice, startDate, endDate, companyName } = req.body;
+    let { image } = req.body;
     const userId = req.user._id.toString();
 
     const user = await User.findById(userId);
@@ -42,7 +54,7 @@ export const createAuctionItem = async (req, res) => {
       return res.status(404).json({ error: "User not found!" });
     }
 
-    if (!title || !description || !startPrice) {
+    if (!itemName || !startPrice || !companyName || !startDate || !endDate) {
       return res.status(400).json({ error: "All fields are required" });
     }
 
@@ -53,8 +65,8 @@ export const createAuctionItem = async (req, res) => {
 
     const newAuctionItem = new AuctionItem({
       owner: userId,
-      title,
-      description,
+      companyName,
+      itemName,
       startPrice,
       startDate,
       endDate,
@@ -84,10 +96,6 @@ export const userBid = async (req, res) => {
       return res.status(403).json({ error: "Admins can't bid" });
     }
 
-    if (!amount) {
-      return res.status(400).json({ error: "Amount is required" });
-    }
-
     const auctionItem = await AuctionItem.findById(id);
     if (!auctionItem) {
       return res.status(404).json({ error: "Auction item not found!" });
@@ -95,6 +103,14 @@ export const userBid = async (req, res) => {
 
     if (Date.now() > new Date(auctionItem.endDate)) {
       return res.status(400).json({ error: "Auction has ended" });
+    }
+
+    if (Date.now() < new Date(auctionItem.startDate)) {
+      return res.status(400).json({ error: "Auction has not started" });
+    }
+
+    if (!amount) {
+      return res.status(400).json({ error: "Amount is required" });
     }
 
     if (amount < auctionItem.startPrice) {
