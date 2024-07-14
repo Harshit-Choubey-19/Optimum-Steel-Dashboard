@@ -16,6 +16,7 @@ import CreateProduct from "./pages/admin/pages/CreateProduct";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import MainAuctionPage from "./pages/auction/MainAuctionPage";
 import AuctionItemDetail from "./pages/auction/AuctionItemDetail";
+import CreateAuction from "./pages/admin/pages/CreateAuction";
 
 function App() {
   const [check, setCheck] = useState(false);
@@ -119,6 +120,16 @@ function App() {
           path="/auction/:id"
           element={
             authUser && check ? <AuctionItemDetail /> : <Navigate to="/" />
+          }
+        />
+        <Route
+          path="/admin/auction/create"
+          element={
+            authUser && check && isAdmin ? (
+              <CreateAuction />
+            ) : (
+              <Navigate to="/" />
+            )
           }
         />
       </Routes>

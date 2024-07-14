@@ -1,33 +1,35 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import NavBar from "../../components/NavBar";
 import AuctionItem from "./AuctionItem";
 import Footer from "../../components/Footer";
+import { useQuery } from "@tanstack/react-query";
+import LoadingSpinner from "../../common/LoadingSpinner";
 
 const MainAuctionPage = () => {
-  const auctionItems = [
-    {
-      _id: 1,
-      name: "Auction Item 1",
-      description: "This is the description of auction item 1",
-      image: "https://picsum.photos/200/300",
-      bid: 0,
-      highestBid: 0,
-      highestBidder: "No one",
-      startDate: "10 July 2024",
-      duration: "14:00 - 15:15",
+  const {
+    data: auctionItems,
+    isLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["auctionItems"],
+    queryFn: async () => {
+      try {
+        const res = await fetch("/api/auctions");
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || "Something went wrong!");
+        }
+        return data;
+      } catch (error) {
+        throw new Error(error);
+      }
     },
-    {
-      _id: 2,
-      name: "Auction Item 2",
-      description: "This is the description of auction item 2",
-      image: "https://picsum.photos/200/300",
-      bid: 0,
-      highestBid: 0,
-      highestBidder: "No one",
-      startDate: "12 July 2024",
-      duration: "16:00 - 17:15",
-    },
-  ];
+  });
+
+  useEffect(() => {
+    refetch();
+  }, [auctionItems, refetch]);
 
   return (
     <>
@@ -52,16 +54,20 @@ const MainAuctionPage = () => {
                 </thead>
                 {/* body */}
                 <tbody>
-                  {auctionItems.map((item) => (
-                    <AuctionItem key={item.id} item={item} />
-                  ))}
+                  {isLoading ? (
+                    <LoadingSpinner size="3xl" />
+                  ) : (
+                    auctionItems?.map((item) => (
+                      <AuctionItem key={item.id} item={item} />
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
           </div>
         </div>
       </div>
-      <div className="sticky mt-[100px]">
+      <div className={`sticky ${auctionItems?.length <= 3 && "mt-40"}`}>
         <Footer />
       </div>
     </>

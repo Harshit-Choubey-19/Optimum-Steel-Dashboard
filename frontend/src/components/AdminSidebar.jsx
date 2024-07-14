@@ -31,40 +31,35 @@ const AdminSidebar = () => {
           </a>
         </li>
         <li className="mt-14 w-full text-lg">
-          <a>
-            <IoIosStats className="size-5" /> Stats
+          <a href="/admin/auction/create">
+            <IoAddCircle className="size-5" /> Create Auction
           </a>
         </li>
       </ul>
       {isMobile && (
-        <ul className="menu menu-horizontal bg-base-200 rounded-box mt-8 fixed bottom-0 left-0 w-full flex justify-between z-30">
-          <li className="flex-1 text-center">
-            <a
-              href="/admin"
-              className="tooltip hover:rounded-full w-1/2"
-              data-tip="Home"
-            >
-              <MdHome className="size-5" />
+        <ul className="menu menu-horizontal bg-base-200 rounded-box mt-8 fixed bottom-0 left-0 w-full flex z-30 justify-evenly items-center">
+          <li className="text-center">
+            <a href="/admin" className="tooltip" data-tip="Home">
+              <MdHome className="size-6" />
             </a>
           </li>
-          <li className="flex-1 text-center">
-            <a
-              href="/admin/create"
-              className="tooltip hover:rounded-full w-1/2"
-              data-tip="Create"
-            >
-              <IoAddCircle className="size-5" />
-            </a>
-          </li>
-          <li className="flex-1 text-center">
-            <a className="tooltip hover:rounded-full w-1/2" data-tip="Review">
-              <MdOutlinePreview className="size-5" />
-            </a>
-          </li>
-          <li className="flex-1 text-center">
-            <a className="tooltip hover:rounded-full w-1/2" data-tip="Stats">
-              <IoIosStats className="size-5" />
-            </a>
+          <li className="text-center">
+            <div className="dropdown dropdown-top dropdown-end hover:bg-base-200">
+              <div tabIndex={0} role="button" className="btn">
+                <IoAddCircle className="size-6" />
+              </div>
+              <ul
+                tabIndex={0}
+                className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
+              >
+                <li>
+                  <a href="/admin/create">Create Product</a>
+                </li>
+                <li>
+                  <a href="/admin/auction/create">Create Auction</a>
+                </li>
+              </ul>
+            </div>
           </li>
         </ul>
       )}
